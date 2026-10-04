@@ -90,3 +90,14 @@ where total_sale > 1000;
 Select category, gender, Count(*) From Retail_sales
 Group By gender, category
 order by 1;
+
+--10) Write a query to calculate the average sale from each month. Find out the best selling month in each year.
+Select * FROM(
+SELECT 
+	EXTRACT(YEAR FROM sale_date) as Year,
+	EXTRACT(MONTH FROM sale_date) as MONTH,
+	AVG(total_sale) as Average_sale,
+	RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sale_date) ORDER BY AVG(total_sale) DESC )
+From Retail_sales
+GROUP BY 1, 2)
+Where RANK = 1;
